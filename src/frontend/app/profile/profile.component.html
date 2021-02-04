@@ -1,0 +1,246 @@
+<div class="panel-container" *ngIf="this.signaturesService.sideNavRigtDatas.mode == 'profile'">
+    <div *ngIf="loading"
+        style="position: absolute;z-index: 2;display: flex;background: #fffc;width: 100%;height: 100%;justify-content: center;align-items: center;">
+        <mat-spinner></mat-spinner>
+    </div>
+    <div class="panel-header">
+        <div class="user">
+            {{'lang.myProfil' | translate}}
+        </div>
+        <div #avatarProfile class="avatarProfile"
+            [ngStyle]="{'background': 'url(' + this.avatarInfo.picture + ') no-repeat scroll center center / cover'}"
+            (tap)="uploadFile.click();">
+        </div>
+        <input #uploadFile type="file" style="display:none;" (change)="handleFileInput($event.target.files)">
+    </div>
+    <div class="panel-content">
+        <form (ngSubmit)="submitProfile()" #profileForm="ngForm">
+            <mat-tab-group #tabProfile (selectedTabChange)="initProfileTab($event);">
+                <mat-tab label="{{'lang.informations' | translate}}">
+                    <div class="profile-content">
+                        <mat-form-field class="input-row">
+                            <input name="login" matInput placeholder="{{'lang.login' | translate}}" type="text"
+                                [(ngModel)]="profileInfo.login" (keyup)="newLogin.login=newLogin.login.toLowerCase()"
+                                disabled required>
+                        </mat-form-field>
+                        <mat-form-field class="input-row">
+                            <input name="email" matInput placeholder="{{'lang.email' | translate}}" type="mail"
+                                [(ngModel)]="profileInfo.email"
+                                pattern="(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)" required>
+                        </mat-form-field>
+                        <mat-form-field class="input-row">
+                            <input name="firstname" matInput placeholder="{{'lang.firstname' | translate}}"
+                                [(ngModel)]="profileInfo.firstname" required>
+                        </mat-form-field>
+                        <mat-form-field class="input-row">
+                            <input name="nom" matInput placeholder="{{'lang.lastname' | translate}}"
+                                [(ngModel)]="profileInfo.lastname" required>
+                        </mat-form-field>
+                        <mat-accordion *ngIf="authService.authMode === 'default'">
+                            <mat-expansion-panel (closed)="showPassword=false" (opened)="changePasswd()"
+                                #passwordContent>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        {{'lang.updatePassword' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <ng-container *ngIf="showPassword">
+                                    <mat-form-field class="input-row">
+                                        <input name="currentPassword" matInput [(ngModel)]="password.currentPassword"
+                                            placeholder="{{'lang.currentPassword' | translate}}"
+                                            [type]="hideCurrentPassword ? 'password' : 'text'">
+                                        <mat-icon matSuffix (click)="hideCurrentPassword = !hideCurrentPassword"
+                                            class="fa fa-2x"
+                                            [ngClass]="[hideCurrentPassword ? 'fa-eye-slash' : 'fa-eye']"></mat-icon>
+                                    </mat-form-field>
+                                    <mat-form-field class="input-row">
+                                        <input name="newPassword" matInput [(ngModel)]="password.newPassword"
+                                            placeholder="{{'lang.newPassword' | translate}}"
+                                            [type]="hideNewPassword ? 'password' : 'text'"
+                                            (keyup)="checkPasswordValidity(password.newPassword)">
+                                        <mat-icon matSuffix (click)="hideNewPassword = !hideNewPassword"
+                                            class="fa fa-2x" [ngClass]="[hideNewPassword ? 'fa-eye-slash' : 'fa-eye']">
+                                        </mat-icon>
+                                        <mat-hint style="color:red;">{{handlePassword.errorMsg | translate}}</mat-hint>
+                                    </mat-form-field>
+                                    <mat-form-field class="input-row">
+                                        <input name="passwordConfirmation" matInput
+                                            [(ngModel)]="password.passwordConfirmation"
+                                            placeholder="{{'lang.passwordConfirmation' | translate}}"
+                                            [type]="hideNewPasswordConfirm ? 'password' : 'text'">
+                                        <mat-icon matSuffix (click)="hideNewPasswordConfirm = !hideNewPasswordConfirm"
+                                            class="fa fa-2x"
+                                            [ngClass]="[hideNewPasswordConfirm ? 'fa-eye-slash' : 'fa-eye']"></mat-icon>
+                                        <mat-hint style="color:red;"
+                                            *ngIf="password.passwordConfirmation !== password.newPassword">
+                                            {{'lang.passwordNotMatch' | translate}}</mat-hint>
+                                        <mat-hint style="color:green;"
+                                            *ngIf="password.passwordConfirmation === password.newPassword && password.newPassword.length > 0 && password.passwordConfirmation.length> 0">
+                                            {{'lang.samePassword' | translate}}</mat-hint>
+                                    </mat-form-field>
+                                </ng-container>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                </mat-tab>
+                <mat-tab label="{{'lang.preferences' | translate}}">
+                    <div class="profile-content">
+                        <div class="input-row">
+                            <fieldset>
+                                <legend align="left">{{'lang.notifications' | translate}}</legend>
+                                <div class="form-container">
+                                    <div class="form-2-col">
+                                        <mat-slide-toggle [checked]="this.preferenceInfo.notifications"
+                                            (change)="this.preferenceInfo.notifications=!this.preferenceInfo.notifications"
+                                            color="primary">{{'lang.receiveNotif' | translate}}</mat-slide-toggle>
+                                    </div>
+                                    <div class="form-2-col" style="text-align: justify;font-size: 12px;">
+
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="input-row">
+                            <fieldset>
+                                <legend align="left">{{'lang.language' | translate}}</legend>
+                                <div class="form-container">
+                                    <div class="form-2-col">
+                                        <mat-form-field>
+                                            <mat-select #langSelect name="langUser"
+                                                [(ngModel)]="this.preferenceInfo.lang">
+                                                <mat-option *ngFor="let lang of this.profileInfo['availableLanguages']"
+                                                    [value]="lang">{{'lang.'+lang | translate }}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="form-2-col" style="text-align: justify;font-size: 12px;">
+
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="input-row">
+                            <fieldset>
+                                <legend align="left">{{'lang.annotationMode' | translate}}</legend>
+                                <div class="form-container">
+                                    <div class="form-2-col">
+                                        <mat-form-field>
+                                            <mat-select name="writingMode"
+                                                [(ngModel)]="this.preferenceInfo.writingMode">
+                                                <mat-option value="direct">{{'lang.free' | translate}}</mat-option>
+                                                <mat-option value="stylus">{{'lang.appleStylus' | translate}} <i
+                                                        class="fab fa-apple"></i>
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="this.preferenceInfo.writingMode == 'stylus'" class="form-2-col"
+                                        style="text-align: justify;font-size: 12px;"
+                                        [innerHTML]="'lang.freeModeInfo' | translate">
+                                    </div>
+                                    <div *ngIf="this.preferenceInfo.writingMode == 'direct'" class="form-2-col"
+                                        style="text-align: justify;font-size: 12px;"
+                                        [innerHTML]="'lang.standardModeInfo' | translate">
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+                        <div class="input-row">
+                            <fieldset>
+                                <legend align="left">{{'lang.stylusWidh' | translate}}</legend>
+                                <div class="form-container">
+                                    <div class="form-2-col">
+                                        <mat-form-field>
+                                            <mat-select name="writingSize" [(ngModel)]="this.preferenceInfo.writingSize"
+                                                (selectionChange)="drawSample();">
+                                                <mat-option *ngFor='let in of counter(10) ;let i = index' [value]="i+1">
+                                                    {{i+1}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="form-2-col">
+                                        <canvas id="sampleNote" width="150" height="150"></canvas>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="input-row">
+                            <fieldset style="display:table;">
+                                <legend align="left">{{'lang.defaultColor' | translate}}</legend>
+                                <div class="form-container">
+                                    <div class="form-2-col">
+                                        <mat-form-field>
+                                            <mat-select name="writingColor"
+                                                [(ngModel)]="this.preferenceInfo.writingColor">
+                                                <mat-option style="color:#000000" value="#000000">
+                                                    {{'lang.black' | translate}}</mat-option>
+                                                <mat-option style="color:#1a75ff" value="#1a75ff">
+                                                    {{'lang.blue' | translate}}</mat-option>
+                                                <mat-option style="color:#FF0000" value="#FF0000">
+                                                    {{'lang.red' | translate}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="form-2-col">
+                                        <div style="height:50px;width:100px;margin:auto;"
+                                            [style.backgroundColor]="this.preferenceInfo.writingColor">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="{{'lang.substitution' | translate}}">
+                    <div class="profile-content">
+                        <div class="input-row">
+                            <fieldset>
+                                <legend align="left">{{'lang.substitute' | translate}}</legend>
+                                <div class="form-container">
+                                    <div class="form-col">
+                                        <mat-form-field class="selectedSubstitute"
+                                            *ngIf="authService.user.substitute !== null">
+                                            <input matInput [value]="authService.user.substituteUser" readonly>
+                                            <button matSuffix mat-icon-button type="button" (tap)="deleteSubstitute()"
+                                                color="warn" title="{{'lang.deleteSubstitution' | translate}}">
+                                                <mat-icon fontSet="fas" fontIcon="fa-times fa-2x"></mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                        <plugin-autocomplete *ngIf="authService.user.substitute === null"
+                                            [labelPlaceholder]="'lang.chooseSubstitute' | translate"
+                                            [routeDatas]="['/rest/autocomplete/users']"
+                                            [targetSearchKey]="['lastname', 'firstname']" [subInfoKey]="'email'"
+                                            (triggerEvent)="selectSubstitute($event)"
+                                            [excludeClause]="[{id:profileInfo.id}, {substitute: true}]">
+                                        </plugin-autocomplete>
+                                    </div>
+                                </div>
+                                <br/>
+                                <fieldset *ngIf="authService.user.substitute != null && signaturesService.signaturesList.length > 0">
+                                    <legend align="left">{{'lang.signSubstituted' | translate}} :</legend>
+                                    <ng-container>
+                                        <button type="button" class="signListButton" mat-stroked-button *ngFor="let signature of signaturesService.signaturesList; let i=index" (click)="toggleSignature(i)" [class.selected]="signature.substituted">
+                                            <img style="width: 190px;" [src]="sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + signature.encodedSignature)"/>
+                                        </button>
+                                    </ng-container>
+                                </fieldset>
+                            </fieldset>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+            <span class="actions">
+                <button class="validate" mat-button color="primary" type="submit"
+                    [disabled]="allowValidate() || !profileForm.form.valid">{{
+                            msgButton | translate}}</button>
+                <button *ngIf="signaturesService.mobileMode" class="cancel" mat-icon-button type="button"
+                    (tap)="closeProfile();">
+                    <mat-icon fontSet="fas" fontIcon="fa-arrow-left fa-2x"></mat-icon>
+                </button>
+            </span>
+        </form>
+    </div>
+</div>

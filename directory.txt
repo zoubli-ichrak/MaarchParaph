@@ -1,0 +1,8 @@
+<Directory /var/www/html>
+Options Indexes FollowSymLinks
+AllowOverride All
+Require all granted
+SetEnv MAARCH_TMP_DIR "/tmp/"
+SetEnv CONFIG_DIR "/var/www/html/MaarchParapheur/config/"
+SetEnv MAARCH_ENCRYPT_KEY "Security Key Maarch Parapheur From Docker"
+</Directory>

@@ -1,0 +1,36 @@
+<article class="signatures" *ngIf="signaturesService.showSign">
+  <section class="list">
+    <div class="list-item create" (click)="uploadFile.click()">
+      <i class="fas fa-upload fa-2x"></i>
+      {{'lang.importNewSignature' | translate}}
+    </div>
+    <input #uploadFile type="file" style="display:none;" (change)="handleFileInput($event.target.files)">
+    <div class="list-item create" (click)="openPad()">
+      <i class="fas fa-pen-nib fa-2x"></i>
+      {{'lang.createNewSignature' | translate}}
+    </div>
+    <div [@listAnimation]="signaturesService.signaturesListSubstituted.length" style="display: contents;">
+      <div *ngFor="let signature of signaturesService.signaturesListSubstituted;let i=index" class="list-item" [title]="'lang.selectSignature' | translate" style="position: relative;overflow: hidden" (tap)="tapEvent(signature,i,'substitute')">
+        <button mat-mini-fab color="primary" [title]="'lang.selectSignature' | translate" class="sign_icon add_icon" (tap)="selectSignature(signature,'imgSignSub_'+i);">
+          <mat-icon class="fa fa-arrow-up"></mat-icon>
+        </button>
+        <img id="imgSignSub_{{i}}" [src]="sanitization.bypassSecurityTrustUrl('data:image/png;base64,' + signature.encodedSignature)"
+          style="width: 190px;">
+        <div class="substituteInfo">{{'lang.substitutedSignature' | translate}}</div>
+      </div>
+    </div>
+    <div [@listAnimation]="signaturesService.signaturesList.length" style="display: contents;">
+      <div *ngFor="let signature of signaturesService.signaturesList;let i=index" class="list-item" [title]="'lang.selectSignature' | translate" style="position: relative;overflow: hidden" (tap)="tapEvent(signature,i,'')">
+        <button mat-mini-fab color="warn" [title]="'lang.removeSignature' | translate" class="sign_icon remove_icon" (tap)="removeSignature(signature,i);">
+          <mat-icon class="fa fa-times"></mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" [title]="'lang.selectSignature' | translate" class="sign_icon add_icon" (tap)="selectSignature(signature,'imgSign_'+i);">
+          <mat-icon class="fa fa-arrow-up"></mat-icon>
+        </button>
+        <img id="imgSign_{{i}}" [src]="sanitization.bypassSecurityTrustUrl('data:image/png;base64,' + signature.encodedSignature)"
+          style="width: 190px;">
+      </div>
+    </div>
+  </section>
+</article>
+<app-pad (reloaded)="reloadSignatures()"></app-pad>

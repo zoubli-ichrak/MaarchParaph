@@ -1,0 +1,9 @@
+composer.lock
+config/config.xml
+.vscode/
+.phplint-cache
+.phplint.yml
+*.log
+xdelete.sh
+test/unitTests/build/
+

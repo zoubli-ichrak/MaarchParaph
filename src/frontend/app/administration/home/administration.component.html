@@ -1,0 +1,27 @@
+<mat-sidenav-container autosize>
+  <mat-sidenav #snav [disableClose]="!signaturesService.mobileMode" [mode]="signaturesService.mobileMode ? 'over': 'side'" fixedInViewport="true"
+  [opened]="!signaturesService.mobileMode" [style.width.px]="350">
+  <app-admin-sidebar [snavLeftComponent]="this.snav" [snavRightComponent]="this.snavRight"></app-admin-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content class="mainView">
+    <header class="header">
+        <button *ngIf="signaturesService.mobileMode" mat-icon-button (click)="this.snav.toggle();">
+        <mat-icon fontSet="fas" fontIcon="fa-bars" style="font-size: 24px;"></mat-icon>
+      </button> {{'lang.administration' | translate}}
+    </header>
+    <div class="container">
+        <div class="admin-item" *ngFor="let privilege of authService.user.administrativePrivileges">
+            <button mat-stroked-button color="primary" [routerLink]="privilege.route">
+              <mat-icon color="primary" [class]="privilege.icon"></mat-icon>
+              <span>{{'lang.' + privilege.id | translate}}</span>
+              <span class="admin-desc">
+                  {{'lang.' + privilege.id + 'Desc' | translate}}
+              </span>
+            </button>
+        </div>
+    </div>
+  </mat-sidenav-content>
+  <mat-sidenav #snavRight disableClose [mode]="signaturesService.mobileMode ? 'over': 'side'" [opened]="false"
+    fixedInViewport="true" position='end'>
+  </mat-sidenav>
+</mat-sidenav-container>

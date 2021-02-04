@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <base id="baseHref">
+    <script type="text/javascript">
+        let fullPath = window.location.pathname;
+        let before = fullPath.split('/')[0];
+        let splitedUrl = fullPath.split('/')[1];
+        let after = fullPath.split('/')[2];
+
+        if (typeof splitedUrl === 'undefined' || splitedUrl === '' || splitedUrl === 'dist') {
+            document.getElementById('baseHref').href = '/dist/';
+        } else if (before == '' && (after == 'dist' || after == '')) {
+            document.getElementById('baseHref').href = '/' + splitedUrl + '/dist/';
+        } else {
+            document.getElementById('baseHref').href = '/' + splitedUrl;
+        }
+    </script>
+    <meta charset="utf-8">
+    <title>MyBank</title>
+
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="icon" type="image/x-icon" href="frontend/core/favicon.ico">
+    <link rel="apple-touch-icon" href="frontend/assets/apple-touch-icon.png">
+</head>
+<body>
+<app-root></app-root>
+<script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="polyfills.js"></script><script type="text/javascript" src="styles.js"></script><script type="text/javascript" src="scripts.js"></script><script type="text/javascript" src="vendor.js"></script><script type="text/javascript" src="main.js"></script></body>
+</html>

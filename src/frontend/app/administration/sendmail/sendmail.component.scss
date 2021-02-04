@@ -1,0 +1,92 @@
+@import '../../../css/vars.scss';
+
+.testSendTo {
+    width:95%;
+    margin-top:10px;
+    margin-left:10px
+}
+
+.bash {
+    background : #34495e; 
+    height : 310px ; 
+    border-radius : 5px ;
+    top: 40px;
+    display : absolute; 
+    color : #fff ;
+    padding: 10px;
+    margin: 10px;
+    word-wrap: break-word;
+}
+
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+.panel-header {
+    box-shadow: 0px 0px 10px 0px #656565;
+    color: white;
+    background: $primary;
+    height: 95px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    font-size: 25px;
+    align-items: center;
+}
+  
+.panel-content {
+    flex: 1;
+    overflow: auto;
+}
+
+.cancel {
+    position: absolute;
+    top: 10px;
+    left: 0px; 
+    height: 65px;
+    width: 65px;
+    font-size: 35px;
+    color: white;
+}
+
+.auth-container {
+    display:flex;
+
+    .auth-1 {
+        width:100px;
+        padding-right: 10px;
+    }
+    .auth-2 {
+        flex:1;
+    }
+    .auth-3 {
+        width:50px;
+        padding-left: 10px;
+    }
+}
+
+@media (max-width: 360px) { 
+    .auth-container {
+        display:flex;
+        flex-direction: column;
+
+        .auth-1 {
+            width:100%;
+            padding-right: 0px;
+        }
+        .auth-2 {
+            width:100%;
+            flex:1;
+        }
+        .auth-3 {
+            width:100%;
+            padding-left: 0px;
+        }
+    }
+}
+
+

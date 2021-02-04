@@ -1,0 +1,15 @@
+<div class="modalContent">
+    <h1 mat-dialog-title><i class="fa fa-exclamation-triangle fa-2x"></i><br/>{{'lang.warning' | translate}} !</h1>
+    <div mat-dialog-content>
+      <p>{{'lang.wouldLikeConfirm' | translate}}</p>
+      <p>
+        <textarea [(ngModel)]="note" class="note" matInput placeholder="{{'lang.addNote' | translate}}"></textarea>
+      </p>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-icon-button class="close" (click)="this.dialogRef.close();">
+        <mat-icon fontSet="fas" fontIcon="fa-times"></mat-icon>
+      </button>
+      <button class="actions btn red" mat-button cdkFocusInitial (click)="confirmDoc();" [disabled]="disableState"><i class="fas fa-backspace fa-2x"></i> {{ msgButton | translate}}</button>
+    </div>
+</div>

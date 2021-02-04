@@ -1,0 +1,286 @@
+
+// CORE VARS COLOR
+@import '../css/vars.scss';
+
+// COMPILATED MATERIAL THEMING
+@import '../css/maarch-material.css';
+@import '../css/maarch-material-alert.scss';
+
+
+.default {
+  color: $color-main;
+}
+
+.primary {
+  color: $primary;
+}
+
+.red {
+  color: $warn;
+}
+
+.green {
+  color: $accent;
+}
+
+html, body {
+  overflow: hidden;
+  height: 100%;
+  width: 100vw;
+  position: fixed;
+  padding: 0;
+  margin: 0;
+}
+
+i, input, button, .mat-bottom-sheet-container, .mat-sidenav-container  {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.c-active-color {
+  color: $primary;
+}
+.bold {
+  font-weight: bold;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+}
+.btn-filled {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid black;
+  color: white;
+  background-color: #fff;
+  padding: 0 25px;
+  border-radius: 25px !important;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 10px 10px 17px -10px rgba(0,0,0,0.75);
+  transition: all 0.2;
+  &:active {
+    transition: all 0.2;
+    box-shadow: none;
+  }
+  &.btn-xs {
+    height: 35px;
+  }
+  &.green {
+    background-color: $accent;
+    border: 1px solid $accent;
+  }
+  &.red {
+    background-color: $warn;
+    border: 1px solid $warn;
+  }
+  &.blue {
+    background-color: $primary;
+    border: 1px solid $primary;
+    &.active {
+      color: #fff;
+      background: $primary;
+    }
+  }
+  &:disabled {
+    opacity: 0.5;
+    color: #000;
+    border: 1px solid #000;
+    cursor: not-allowed;
+  }
+  .fas, i, .material-icons {
+    margin: 0 5px;
+  }
+}
+
+.btn {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid black;
+  background-color: #fff;
+  padding: 0 25px;
+  border-radius: 25px !important;
+  cursor: pointer;
+  outline: none;
+  &.btn-xs {
+    height: 35px;
+  }
+  &.green {
+    color: $accent;
+    border: 1px solid $accent;
+  }
+  &.red {
+    color: $warn;
+    border: 1px solid $warn;
+  }
+  &.blue {
+    color: $primary;
+    border: 1px solid $primary;
+    &.active {
+      color: #fff;
+      background: $primary;
+    }
+  }
+  &:disabled {
+    opacity: 0.5;
+    color: #000;
+    border: 1px solid #000;
+    cursor: not-allowed;
+  }
+  .fas, i, .material-icons {
+    margin: 0 5px;
+  }
+}
+.toggle {
+  appearance: none;
+  position: relative;
+  width: 60px;
+  height: 38px;
+  border-radius: 19px;
+  outline: none;
+  transition: all 0.1s;
+  border: solid 1px #ECF0F1;
+  background: #ECF0F1;
+  &:after {
+    content: "";
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #ECF0F1;
+    border-radius: 18px;
+    box-shadow: 0 1px 2px 0 rgba(9, 11, 15, 0.06);
+  }
+  &:checked {
+    border-color: $accent;
+    background: $accent;
+    &:after {
+      right: 0;
+      top: 0;
+    }
+  }
+}
+
+body {
+  font-family: 'lato', sans-serif;
+  color: $color-main;
+  -webkit-font-smoothing: antialiased;
+}
+
+.footer {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+}
+
+button.disabled {
+  cursor: not-allowed;
+}
+
+.dragger {
+  position: absolute;
+  z-index: 10;
+  background: cyan;
+}
+
+.cdk-global-scrollblock  {
+  overflow: hidden !important;
+}
+
+.mat-snack-bar-container {
+  text-align: center;
+  font-weight: bold;
+}
+
+.mat-snack-bar-container.error-snackbar  {
+  color: $warn;
+  background: white;
+  border: solid 1px $warn;
+}
+
+.mat-snack-bar-container.success-snackbar  {
+  color: $primary;
+  background: white;
+  border: solid 1px $primary;
+}
+
+// bug expand opened if animation, solved it temporarily until a fix arrives
+mat-accordion mat-expansion-panel {
+  mat-expansion-panel-header {
+    height: 40px; // height may be different for you
+  }
+  .mat-expansion-panel-content {
+    height: 0;
+  }
+  &.mat-expanded {
+    mat-expansion-panel-header {
+      height: 64px; // height may be different for you
+    }
+    .mat-expansion-panel-content {
+      height: auto;
+    }
+  }
+}
+
+.mat-drawer {
+  max-width: 99%;
+}
+
+.mat-drawer-container {
+  height: 100%;
+}
+
+.mat-paginator {
+  width: 150px;
+  display: flex !important;
+  justify-content: center;
+  background: none;
+  color: white;
+}
+.mat-paginator-page-size {
+  display: none !important;
+}
+
+.mat-paginator-range-label {
+  position: absolute;
+  line-height: 50px;
+}
+
+.mat-paginator-navigation-next {
+  right: -20px;
+}
+
+.mat-paginator-navigation-previous {
+  left: -20px;
+}
+
+.mat-bottom-sheet-container {
+  max-height: 90vh !important;
+}
+
+.mat-menu-panel {
+  max-width: inherit !important;
+}
+.mat-menu-content:not(:empty) {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}

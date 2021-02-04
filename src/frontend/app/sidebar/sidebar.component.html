@@ -1,0 +1,87 @@
+<nav class="sidebar" *ngIf="snavLeftComponent.opened">
+  <div class="main-header">
+    <header class="profile-header">
+      <button class="logout-button" mat-icon-button (click)="authService.logout()">
+        <mat-icon fontSet="fas" fontIcon="fa-power-off"></mat-icon>
+      </button>
+      <button *ngIf="authService.user.administrativePrivileges.length > 0" class="admin-button" mat-icon-button
+        (click)="openAdmin()">
+        <mat-icon fontSet="fas" fontIcon="fa-tools"></mat-icon>
+      </button>
+      <button *ngIf="checkClose()" class="closePanel" mat-icon-button type="button" (tap)="snavLeftComponent.close();">
+        <mat-icon fontSet="fas" fontIcon="fa-arrow-left fa-2x"></mat-icon>
+      </button>
+      <div class="user" style="color: #F99830" title="{{authService.user.firstname}} {{authService.user.lastname}}">
+        {{authService.user.firstname}} {{authService.user.lastname}}
+      </div>
+      <div *ngIf="authService.user.picture" class="avatar"
+        [ngStyle]="{'background': 'url(' + authService.user.picture + ') no-repeat scroll center center / cover'}"
+        (click)="openProfile()" title="{{'lang.myProfil' | translate}}">
+      </div>
+      <div *ngIf="authService.user.picture === '' || authService.user.picture === undefined" class="avatar" (click)="openProfile()" title="{{'lang.myProfil' | translate}}">
+      </div>
+    </header>
+    <header class="sidebar-header">
+      <div *ngIf="!searchMode" (click)="search();" style="cursor: pointer;">
+        <span
+          [class.primary]="signaturesService.mode != ''">{{signaturesService.documentsListCount.current}}</span>&nbsp;{{'lang.documents' | translate}}&nbsp;<span
+          class="primary"
+          *ngIf="signaturesService.mode != ''">{{'lang.'+signaturesService.mode+'Label' | translate}}</span>
+      </div>
+      <button *ngIf="!searchMode" color="primary" mat-icon-button type="button" (click)="search();"
+        title="{{'lang.search' | translate}}">
+        <mat-icon fontSet="fas" fontIcon="fa-search fa-2x"></mat-icon>
+      </button>
+      <mat-form-field *ngIf="searchMode" floatLabel="never" style="width: 80%;">
+        <input #searchInput matInput placeholder="{{'lang.filterInfo' | translate}}" [formControl]="searchTerm">
+        <button matSuffix color="primary" mat-icon-button type="button"
+          (click)="searchMode = !searchMode;this.filter('');" title="{{'lang.cancel' | translate}}">
+          <mat-icon fontSet="fas" fontIcon="fa-times fa-2x"></mat-icon>
+        </button>
+      </mat-form-field>
+    </header>
+    <section class="sidebar-btn">
+      <button class="btn btn-xs blue filter" [class.noDoc]="signaturesService.documentsListCount.sign === 0"
+        [matBadge]="signaturesService.documentsListCount.sign"
+        [ngClass]="[signaturesService.mode == 'sign' ? 'active' : '']"
+        (click)="filter('sign')">{{'lang.signLabel' | translate | titlecase}}</button>
+      <button class="btn btn-xs blue filter" [class.noDoc]="signaturesService.documentsListCount.visa === 0"
+        [matBadge]="signaturesService.documentsListCount.visa"
+        [ngClass]="[signaturesService.mode == 'visa' ? 'active' : '']"
+        (click)="filter('visa')">{{'lang.visaLabel' | translate | titlecase}}</button>
+      <button class="btn btn-xs blue filter" [class.noDoc]="signaturesService.documentsListCount.note === 0"
+        [matBadge]="signaturesService.documentsListCount.note"
+        [ngClass]="[signaturesService.mode == 'note' ? 'active' : '']"
+        (click)="filter('note')">{{'lang.noteLabel' | translate | titlecase}}</button>
+    </section>
+  </div>
+  <ul #listContent class="nav" detect-scroll (onScroll)="handleScroll($event)" [bottomOffset]="1" [topOffset]="1">
+    <div *ngIf="loadingList" class="loadList">
+      <mat-spinner></mat-spinner>
+    </div>
+    <ng-container *ngFor="let document of signaturesService.documentsList;let i=index">
+      <li [class.active]="signaturesService.mainDocumentId === document.id" class="nav-item" matRipple
+        (click)="gotTo(document.id, i)">
+        <div class="nav-item-left">
+          <i class="fas" [ngClass]="{
+            'fa-file-signature':document.mode == 'sign',
+            'fa-thumbs-up':document.mode == 'visa',
+            'fa-comment-dots':document.mode == 'note'
+          }"></i>
+        </div>
+        <div class="nav-item-middle">
+          <div class="">{{document.reference}}</div>
+          <div class="nav-item-title">{{document.title | shorten: 50: '...'}}</div>
+          <div *ngIf="!document.owner" style="color:#F99830;font-size: 10px;">{{'lang.substitutedDoc' | translate}}
+          </div>
+        </div>
+        <div class="nav-item-right">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </li>
+    </ng-container>
+    <span *ngIf="signaturesService.documentsList.length == 0" class="noResult">
+      {{'lang.noResult' | translate | titlecase}}
+    </span>
+  </ul>
+</nav>
